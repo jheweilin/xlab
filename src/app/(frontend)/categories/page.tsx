@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { CategoryGrid } from "@/components/frontend/CategoryGrid";
 import prisma from "@/lib/prisma";
 
@@ -10,7 +12,7 @@ async function getCategories() {
         where: { isActive: true },
         orderBy: { order: "asc" },
       },
-      _count: { select: { products: true } },
+      _count: { select: { products: true, children: true } },
     },
   });
 }

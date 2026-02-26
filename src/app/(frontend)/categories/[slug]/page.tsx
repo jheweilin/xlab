@@ -40,7 +40,7 @@ async function getCategoryData(slug: string, page: number) {
       take: pageSize,
       include: {
         images: { orderBy: { order: "asc" }, take: 1 },
-        category: { select: { id: true, name: true, slug: true } },
+        category: true,
       },
     }),
     prisma.product.count({

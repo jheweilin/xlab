@@ -125,7 +125,7 @@ export default function ProductsPage() {
       content: product.content || "",
       price: product.price?.toString() || "",
       categoryId: product.categoryId,
-      tags: product.tags?.join(", ") || "",
+      tags: product.tags || "",
       isFeatured: product.isFeatured,
       isActive: product.isActive,
       order: product.order,

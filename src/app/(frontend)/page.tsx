@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { HeroBanner } from "@/components/frontend/HeroBanner";
 import { CategoryGrid } from "@/components/frontend/CategoryGrid";
 import { ProductCard } from "@/components/frontend/ProductCard";
@@ -13,7 +15,7 @@ async function getHomeData() {
       orderBy: { order: "asc" },
       take: 4,
       include: {
-        _count: { select: { products: true } },
+        _count: { select: { products: true, children: true } },
       },
     }),
     prisma.product.findMany({
@@ -22,7 +24,7 @@ async function getHomeData() {
       take: 4,
       include: {
         images: { orderBy: { order: "asc" }, take: 1 },
-        category: { select: { id: true, name: true, slug: true } },
+        category: true,
       },
     }),
     prisma.product.findMany({
@@ -31,7 +33,7 @@ async function getHomeData() {
       take: 8,
       include: {
         images: { orderBy: { order: "asc" }, take: 1 },
-        category: { select: { id: true, name: true, slug: true } },
+        category: true,
       },
     }),
   ]);

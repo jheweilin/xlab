@@ -32,7 +32,7 @@ async function getProduct(slug: string) {
     take: 4,
     include: {
       images: { orderBy: { order: "asc" }, take: 1 },
-      category: { select: { id: true, name: true, slug: true } },
+      category: true,
     },
   });
 
