@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  xlab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: xlab-web
+    restart: unless-stopped
+    ports:
+      - "${XLAB_PORT:-4567}:3000"
+    volumes:
+      # 持久化上傳的圖片
+      - ./data/uploads:/app/public/uploads
+      # 持久化 SQLite 資料庫
+      - ./data/db:/app/prisma
+    environment:
+      - NODE_ENV=production
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-xlab-secret-key-change-in-production}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:4567}
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/api/products"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 開發模式（可選）
+  xlab-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: xlab-dev
+    profiles:
+      - dev
+    ports:
+      - "${XLAB_PORT:-4567}:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
