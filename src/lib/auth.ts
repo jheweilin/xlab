@@ -18,30 +18,38 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("請輸入電子郵件和密碼");
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            throw new Error("請輸入電子郵件和密碼");
+          }
+
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+          });
+
+          if (!user) {
+            throw new Error("找不到此帳號");
+          }
+
+          const isValid = await compare(credentials.password, user.password);
+
+          if (!isValid) {
+            throw new Error("密碼錯誤");
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        } catch (error) {
+          if (error instanceof Error && ["請輸入電子郵件和密碼", "找不到此帳號", "密碼錯誤"].includes(error.message)) {
+            throw error;
+          }
+          console.error("Auth error:", error);
+          throw new Error("登入服務暫時無法使用，請稍後再試");
         }
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-
-        if (!user) {
-          throw new Error("找不到此帳號");
-        }
-
-        const isValid = await compare(credentials.password, user.password);
-
-        if (!isValid) {
-          throw new Error("密碼錯誤");
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
       },
     }),
   ],

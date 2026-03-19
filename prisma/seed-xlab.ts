@@ -61,6 +61,24 @@ async function main() {
         isActive: true,
       },
     }),
+    prisma.category.create({
+      data: {
+        name: "影音配件",
+        slug: "av-accessories",
+        description: "HDMI線、影音傳輸線等影音配件",
+        order: 4,
+        isActive: true,
+      },
+    }),
+    prisma.category.create({
+      data: {
+        name: "生活周邊",
+        slug: "lifestyle-accessories",
+        description: "手持風扇、手機支架等生活周邊配件",
+        order: 5,
+        isActive: true,
+      },
+    }),
   ]);
 
   console.log(`✅ 已建立 ${categories.length} 個分類`);
@@ -68,6 +86,8 @@ async function main() {
   const chargingCat = categories[0];
   const protectionCat = categories[1];
   const audioCat = categories[2];
+  const avCat = categories[3];
+  const lifestyleCat = categories[4];
 
   // Create products
   const products = [];
@@ -438,6 +458,218 @@ Type-C / Lightning / 3.5mm 接頭皆有，支援多款手機與設備
     ],
   });
   products.push(wiredEarphone);
+
+  // 9. XLAB 超薄磁吸快充行動電源
+  const powerBank = await prisma.product.create({
+    data: {
+      name: "XLAB 超薄磁吸快充行動電源",
+      slug: "xlab-magsafe-power-bank",
+      description: "磁吸充電+Type-C孔充電，外出攜帶再也不占空間！PD快充最高達20W，極致薄型輕量便攜。",
+      content: `商品特色：
+1.MagSafe磁吸充電/Type-C雙向充放電
+PD快充最高達20W（線充）輸出最高達15W（無線充）。
+2.5000mAh 輕巧迷你/10000mAh大容量
+續航力更持久，滿足日常使用需求。
+3.極致薄型 輕量便攜
+鋁合金外殼+弧形設計，輕鬆零負擔。
+4.支援多種設備
+Type-C孔雙輸出輸入，內附充電線，兼容蘋果/安卓/耳機。
+5.多重電路防護
+優質電芯過充、短路保護，擁有更長的壽命。
+6.精準對位 貼合不擋鏡頭
+外型輕薄，簡約時尚。
+
+商品規格：
+顏色：原鈦
+輸入：Type-C：5V 3A/9V 2A
+輸出：Type-C：9V 2.22A/12V 1.67A
+無線充輸出：5W/7.5W/10W/15W
+多口輸出：無線充：5W+Type-C：5V 2A
+材質：鋁合金、塑膠、電子元件
+
+使用說明：
+1.對行動電源充電：將充電線Type-C端接上本行動電源輸入孔，另一端接入供電設備，即可為行動電源充電。
+2.行動電源對數位產品充電：將欲充電的數位產品充電線Type-C端接上行動電源，或將產品置於無線充電面板上，即可開始充電。`,
+      price: 799,
+      categoryId: chargingCat.id,
+      tags: "行動電源,磁吸,MagSafe,快充",
+      isFeatured: true,
+      isActive: true,
+      order: 6,
+    },
+  });
+
+  await prisma.productImage.createMany({
+    data: [
+      { productId: powerBank.id, url: "/uploads/XLAB行動電源01.jpg", order: 0 },
+      { productId: powerBank.id, url: "/uploads/XLAB行動電源02.jpg", order: 1 },
+      { productId: powerBank.id, url: "/uploads/XLAB行動電源03.jpg", order: 2 },
+      { productId: powerBank.id, url: "/uploads/XLAB行動電源04.jpg", order: 3 },
+      { productId: powerBank.id, url: "/uploads/XLAB行動電源05.jpg", order: 4 },
+    ],
+  });
+  products.push(powerBank);
+
+  // 10. XLAB 超迷你手持風扇
+  const handheldFan = await prisma.product.create({
+    data: {
+      name: "XLAB 超迷你手持風扇",
+      slug: "xlab-mini-handheld-fan",
+      description: "炎炎夏日必備！85g超輕量設計，五檔風速調節，高清LED螢幕顯示電量，Type-C快速充電。",
+      content: `商品特色：
+1.五檔風速調節
+支援一檔清風到五檔強勁風力，自由調整風速，室內外都適用。
+2.85g極致輕量設計
+機身僅 102×39×43mm，重量約 85g，輕鬆放入口袋或包包，攜帶方便。
+3.高清LED螢幕
+可即時顯示風速檔位與電量，使用更直覺，不怕突然沒電。
+4.Type-C快速充電
+採用 Type-C充電接口，支援行動電源、手機充電器等設備。
+5.無刷電機強勁風力
+高效節能馬達，風力強勁同時保持低耗電。
+6.手持＋掛繩設計
+附掛繩可手持或掛脖使用，逛街、通勤、露營更方便。
+7.安全防護設計
+防護網設計，避免誤觸扇葉，使用更安心。
+
+商品規格：
+產品名稱：迷你手持高速風扇
+產品型號：G027 / H02
+風速模式：五檔風速調節
+電池容量：3000mAh
+充電方式：Type-C 充電（DC5V/2A）
+產品尺寸：102 × 39 × 43 mm
+產品重量：約 85g
+顏色選擇：黑色 / 橙色 / 綠色`,
+      price: 399,
+      categoryId: lifestyleCat.id,
+      tags: "手持風扇,迷你,USB風扇",
+      isFeatured: true,
+      isActive: true,
+      order: 1,
+    },
+  });
+
+  await prisma.productImage.createMany({
+    data: [
+      { productId: handheldFan.id, url: "/uploads/XLAB手持風扇01.jpg", order: 0 },
+      { productId: handheldFan.id, url: "/uploads/XLAB手持風扇02.jpg", order: 1 },
+      { productId: handheldFan.id, url: "/uploads/XLAB手持風扇03.jpg", order: 2 },
+      { productId: handheldFan.id, url: "/uploads/XLAB手持風扇04.jpg", order: 3 },
+      { productId: handheldFan.id, url: "/uploads/XLAB手持風扇05.jpg", order: 4 },
+      { productId: handheldFan.id, url: "/uploads/XLAB手持風扇06.jpg", order: 5 },
+      { productId: handheldFan.id, url: "/uploads/XLAB手持風扇07.jpg", order: 6 },
+      { productId: handheldFan.id, url: "/uploads/XLAB手持風扇08.jpg", order: 7 },
+    ],
+  });
+  products.push(handheldFan);
+
+  // 11. XLAB 真空吸附磁吸手機架
+  const phoneMount = await prisma.product.create({
+    data: {
+      name: "XLAB 真空吸附磁吸手機架",
+      slug: "xlab-vacuum-phone-mount",
+      description: "環形強磁＋真空增壓，顛簸不掉穩有如黏住，單手取放、萬向旋轉不擋視線，導航追劇更順手。",
+      content: `商品特色：
+1.環形強磁貼合：磁吸面積大、受力均勻，急煞/顛簸也穩固。
+2.單手取放：靠近即吸、拿起即走，行車更安全。
+3.萬向旋轉：橫/豎屏自由切換，角度高低皆可微調。
+4.觸碰感應增壓：內置電機與晶片，輕觸啟動抽壓，吸力即刻提升。
+5.密閉真空排氣：大面積真空吸盤，長效不脫落。
+6.防抖緩衝結構：坑洞路面、連續震動也不亂晃。
+7.智慧吸附/解鎖：一鍵解鎖更順手。
+8.合金機身：耐用不鬆垮，質感升級。
+9.大容量電池：續航更久，無需頻繁充電。
+10.廣泛相容：支援 4–7.2 吋手機，多機型皆可用。
+
+安裝方式：真空吸盤固定（適用中控台/擋風玻璃等平整位置）
+吸附方式：環形強磁 + 真空增壓（內置電機/晶片，觸碰即抽壓）
+調整範圍：球頭萬向旋轉，橫/豎屏與仰角自由調整
+材質：合金本體+強磁模組+耐候吸盤
+相容尺寸：4–7.2 吋手機
+供電/續航：內置電池（大容量，實際續航依使用頻率）
+內容物：手機架本體（其餘配件如金屬環/Type-C 充電線依賣場選項）
+
+安裝與使用步驟：
+1.以酒精擦拭安裝面，保持乾燥平整。
+2.將吸盤貼上 → 輕壓排氣 → 扳/按鎖固定。
+3.觸碰感應鍵啟動抽壓增附，吸力升級。
+4.將手機靠近磁面自動吸附，調整角度即可。
+
+※非磁吸殼或無磁環的手機（多數安卓/一般保護殼）建議貼金屬環/磁吸環以獲得最佳吸力。`,
+      price: 699,
+      categoryId: lifestyleCat.id,
+      tags: "手機架,車用,磁吸,真空吸附",
+      isFeatured: true,
+      isActive: true,
+      order: 2,
+    },
+  });
+
+  await prisma.productImage.createMany({
+    data: [
+      { productId: phoneMount.id, url: "/uploads/XLAB手機支架01.jpg", order: 0 },
+      { productId: phoneMount.id, url: "/uploads/XLAB手機支架02.jpg", order: 1 },
+      { productId: phoneMount.id, url: "/uploads/XLAB手機支架03.jpg", order: 2 },
+      { productId: phoneMount.id, url: "/uploads/XLAB手機支架04.jpg", order: 3 },
+      { productId: phoneMount.id, url: "/uploads/XLAB手機支架05.jpg", order: 4 },
+      { productId: phoneMount.id, url: "/uploads/XLAB手機支架06.jpg", order: 5 },
+      { productId: phoneMount.id, url: "/uploads/XLAB手機支架07.jpg", order: 6 },
+    ],
+  });
+  products.push(phoneMount);
+
+  // 12. XLAB HDMI影音傳輸線
+  const hdmiCable = await prisma.product.create({
+    data: {
+      name: "XLAB HDMI影音傳輸線",
+      slug: "xlab-hdmi-cable",
+      description: "4K/60Hz・18Gbps 高速穩定，HDR 色彩震撼更流暢！HDMI 2.0規格，向下相容1.4/1.2。",
+      content: `商品特色：
+1.4K 超清流暢：支援 4K/60Hz、HDR 動態顯示，色彩更細膩、畫面更震撼。
+2.18Gbps高速穩定：HDMI 2.0規格，視訊不卡頓、遊戲低延遲。
+3.聲畫同步：影像與音訊同步輸出，追劇/打機更沉浸。
+4.抗干擾升級：高純度 OFC 無氧銅＋5 組鋁箔屏蔽＋編織層，畫質更穩定。
+5.耐用再強化：加粗線徑＋厚實 PVC 外皮，抗壓耐彎折，施工穿管也安心。
+
+規格：
+介面類型：標準 HDMI A—A（公對公）
+線長選擇：1m／1.8m／3m
+材質用料：
+• 24K 鍍金端子頭：高導電、不易氧化、訊號更穩
+• 高純度 OFC 無氧銅導體：減少損耗、畫質不失真
+• 標準 19+1 滿芯：完整腳位、穩定傳輸
+• 5組獨立鋁箔屏蔽＋外層編織網：強化抗電磁干擾（EMI/RFI）
+• 加粗線徑＋加厚 PVC 外皮：耐磨抗壓、抗拉扯
+相容性：向下相容 HDMI 1.4/1.2
+支援：4K/60Hz、HDR、3D、BT.2020 寬色域、ARC（依設備支援）
+
+適用場景：
+• 家庭劇院：電視／音響／機上盒，打造大螢幕沉浸觀影
+• 遊戲娛樂：PS5/PS4、XBOX、Switch，低延遲高速傳輸
+• 會議投影：筆電接投影機／會議盒，訊號穩定不卡畫
+• 商業大屏：廣告看板、LED 顯示屏、展場長時輸出`,
+      price: 299,
+      categoryId: avCat.id,
+      tags: "HDMI,4K,影音線",
+      isFeatured: true,
+      isActive: true,
+      order: 1,
+    },
+  });
+
+  await prisma.productImage.createMany({
+    data: [
+      { productId: hdmiCable.id, url: "/uploads/XLABhdmi線01.jpg", order: 0 },
+      { productId: hdmiCable.id, url: "/uploads/XLABhdmi線02.jpg", order: 1 },
+      { productId: hdmiCable.id, url: "/uploads/XLABhdmi線03.jpg", order: 2 },
+      { productId: hdmiCable.id, url: "/uploads/XLABhdmi線04.jpg", order: 3 },
+      { productId: hdmiCable.id, url: "/uploads/XLABhdmi線05.jpg", order: 4 },
+      { productId: hdmiCable.id, url: "/uploads/XLABhdmi線06.jpg", order: 5 },
+      { productId: hdmiCable.id, url: "/uploads/XLABhdmi線07.jpg", order: 6 },
+    ],
+  });
+  products.push(hdmiCable);
 
   console.log(`✅ 已建立 ${products.length} 個產品`);
 

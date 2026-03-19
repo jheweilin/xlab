@@ -7,20 +7,12 @@
     </linearGradient>
   </defs>
 
-  <!-- Outer hexagon frame -->
-  <path d="M32 4L56 18V46L32 60L8 46V18L32 4Z" stroke="url(#xlab-gradient)" stroke-width="2" fill="none"/>
+  <!-- Left loop -->
+  <path d="M 26,26 C 20,18 4,16 4,32 C 4,48 20,46 26,38" stroke="url(#xlab-gradient)" stroke-width="5" fill="none" stroke-linecap="round"/>
 
-  <!-- Inner X shape -->
-  <path d="M20 20L32 32M32 32L44 44M32 32L44 20M32 32L20 44" stroke="url(#xlab-gradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right loop -->
+  <path d="M 38,26 C 44,18 60,16 60,32 C 60,48 44,46 38,38" stroke="url(#xlab-gradient)" stroke-width="5" fill="none" stroke-linecap="round"/>
 
-  <!-- Center dot -->
-  <circle cx="32" cy="32" r="3" fill="url(#xlab-gradient)"/>
-
-  <!-- Corner accents -->
-  <circle cx="32" cy="4" r="2" fill="#8B5CF6"/>
-  <circle cx="56" cy="18" r="2" fill="#EC4899"/>
-  <circle cx="56" cy="46" r="2" fill="#FF431B"/>
-  <circle cx="32" cy="60" r="2" fill="#FF431B"/>
-  <circle cx="8" cy="46" r="2" fill="#EC4899"/>
-  <circle cx="8" cy="18" r="2" fill="#8B5CF6"/>
+  <!-- X crossing -->
+  <path d="M 26,26 L 38,38 M 38,26 L 26,38" stroke="url(#xlab-gradient)" stroke-width="5" stroke-linecap="round"/>
 </svg>

@@ -52,3 +52,10 @@ prisma/dev.db-journal
 # product source files
 /Product_files/
 /product_files/
+
+# data directory (docker volumes)
+/data/
+
+# misc binary files
+*.zip
+logo.jpg
