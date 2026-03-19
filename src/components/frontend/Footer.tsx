@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-xlab-darker border-t border-white/10">
       <div className="container mx-auto px-4 py-12">
@@ -12,20 +17,20 @@ export function Footer() {
               <Logo size="md" />
             </Link>
             <p className="text-white/60 text-sm">
-              探索最新 3C 電子產品，體驗科技生活。提供最優質的產品與服務。
+              {t("footer_desc") as string}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">快速連結</h3>
+            <h3 className="text-white font-semibold mb-4">{t("footer_quick_links") as string}</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/"
                   className="text-white/60 hover:text-white transition-colors"
                 >
-                  首頁
+                  {t("footer_home") as string}
                 </Link>
               </li>
               <li>
@@ -33,7 +38,7 @@ export function Footer() {
                   href="/products"
                   className="text-white/60 hover:text-white transition-colors"
                 >
-                  所有商品
+                  {t("footer_all_products") as string}
                 </Link>
               </li>
               <li>
@@ -41,7 +46,7 @@ export function Footer() {
                   href="/categories"
                   className="text-white/60 hover:text-white transition-colors"
                 >
-                  產品分類
+                  {t("footer_categories") as string}
                 </Link>
               </li>
             </ul>
@@ -49,14 +54,14 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="text-white font-semibold mb-4">客戶服務</h3>
+            <h3 className="text-white font-semibold mb-4">{t("footer_support") as string}</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="#"
                   className="text-white/60 hover:text-white transition-colors"
                 >
-                  常見問題
+                  {t("footer_faq") as string}
                 </Link>
               </li>
               <li>
@@ -64,7 +69,7 @@ export function Footer() {
                   href="#"
                   className="text-white/60 hover:text-white transition-colors"
                 >
-                  退換貨政策
+                  {t("footer_return_policy") as string}
                 </Link>
               </li>
               <li>
@@ -72,7 +77,7 @@ export function Footer() {
                   href="#"
                   className="text-white/60 hover:text-white transition-colors"
                 >
-                  聯絡我們
+                  {t("footer_contact_us") as string}
                 </Link>
               </li>
             </ul>
@@ -80,11 +85,11 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold mb-4">聯絡資訊</h3>
+            <h3 className="text-white font-semibold mb-4">{t("footer_contact_info") as string}</h3>
             <ul className="space-y-2 text-white/60 text-sm">
               <li>service@xlab.com</li>
               <li>(02) 1234-5678</li>
-              <li>台北市信義區信義路五段 7 號</li>
+              <li>{t("footer_address") as string}</li>
             </ul>
           </div>
         </div>
@@ -98,13 +103,13 @@ export function Footer() {
               href="#"
               className="text-white/40 hover:text-white transition-colors text-sm"
             >
-              隱私權政策
+              {t("footer_privacy") as string}
             </Link>
             <Link
               href="#"
               className="text-white/40 hover:text-white transition-colors text-sm"
             >
-              使用條款
+              {t("footer_terms") as string}
             </Link>
           </div>
         </div>

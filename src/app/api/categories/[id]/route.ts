@@ -53,7 +53,7 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const { name, description, image, parentId, order, isActive } = body;
+    const { name, nameEn, description, descriptionEn, image, parentId, order, isActive } = body;
 
     const existingCategory = await prisma.category.findUnique({
       where: { id: params.id },
@@ -89,6 +89,8 @@ export async function PUT(
     }
 
     if (description !== undefined) updateData.description = description;
+    if (descriptionEn !== undefined) updateData.descriptionEn = descriptionEn || null;
+    if (nameEn !== undefined) updateData.nameEn = nameEn || null;
     if (image !== undefined) updateData.image = image;
     if (parentId !== undefined) updateData.parentId = parentId || null;
     if (order !== undefined) updateData.order = order;

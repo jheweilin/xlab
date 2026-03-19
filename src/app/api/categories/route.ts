@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, description, image, parentId, order, isActive } = body;
+    const { name, nameEn, description, descriptionEn, image, parentId, order, isActive } = body;
 
     if (!name) {
       return NextResponse.json(
@@ -84,8 +84,10 @@ export async function POST(request: NextRequest) {
     const category = await prisma.category.create({
       data: {
         name,
+        nameEn: nameEn || null,
         slug,
         description,
+        descriptionEn: descriptionEn || null,
         image,
         parentId: parentId || null,
         order: order ?? 0,

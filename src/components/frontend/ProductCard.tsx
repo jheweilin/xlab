@@ -1,16 +1,21 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ProductWithImages } from "@/types";
 import { formatPrice, getImageUrl } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ProductCardProps {
   product: ProductWithImages;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { locale, t, localized } = useLanguage();
   const mainImage = product.images[0]?.url;
-  const tags = product.tags ? (typeof product.tags === 'string' ? product.tags.split(',') : product.tags) : [];
+  const rawTags = locale === "en" && (product as any).tagsEn ? (product as any).tagsEn : product.tags;
+  const tags: string[] = rawTags ? (typeof rawTags === 'string' ? rawTags.split(',') : rawTags) : [];
 
   return (
     <Link
@@ -21,7 +26,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {mainImage ? (
           <Image
             src={getImageUrl(mainImage)}
-            alt={product.name}
+            alt={localized(product, "name")}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-500"
           />
@@ -50,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {product.isFeatured && (
           <div className="absolute top-3 right-3">
             <Badge className="bg-gradient-xlab text-white border-0">
-              精選
+              {t("product_featured_badge") as string}
             </Badge>
           </div>
         )}
@@ -58,14 +63,14 @@ export function ProductCard({ product }: ProductCardProps) {
 
       <div className="p-4 space-y-2">
         <p className="text-white/40 text-xs uppercase tracking-wider">
-          {product.category.name}
+          {localized(product.category, "name")}
         </p>
         <h3 className="text-white font-medium line-clamp-2 group-hover:text-primary transition-colors">
-          {product.name}
+          {localized(product, "name")}
         </h3>
-        {product.description && (
+        {(product.description || (product as any).descriptionEn) && (
           <p className="text-white/60 text-sm line-clamp-2">
-            {product.description}
+            {localized(product, "description")}
           </p>
         )}
         <p className="text-lg font-semibold text-gradient">

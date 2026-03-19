@@ -6,11 +6,14 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CategoryWithChildren } from "@/types";
 import { Logo } from "./Logo";
+import { LanguageToggle } from "./LanguageToggle";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [categories, setCategories] = useState<CategoryWithChildren[]>([]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const { t, localized } = useLanguage();
 
   useEffect(() => {
     fetch("/api/categories?activeOnly=true")
@@ -37,7 +40,7 @@ export function Navbar() {
               href="/"
               className="text-white/80 hover:text-white transition-colors"
             >
-              首頁
+              {t("nav_home") as string}
             </Link>
 
             {categories.map((category) => (
@@ -51,7 +54,7 @@ export function Navbar() {
                   href={`/categories/${category.slug}`}
                   className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
                 >
-                  {category.name}
+                  {localized(category, "name")}
                   {category.children && category.children.length > 0 && (
                     <ChevronDown className="w-4 h-4" />
                   )}
@@ -73,7 +76,7 @@ export function Navbar() {
                           href={`/categories/${child.slug}`}
                           className="block px-4 py-2 text-white/80 hover:text-white hover:bg-white/5 transition-colors"
                         >
-                          {child.name}
+                          {localized(child, "name")}
                         </Link>
                       ))}
                     </div>
@@ -86,17 +89,22 @@ export function Navbar() {
               href="/products"
               className="text-white/80 hover:text-white transition-colors"
             >
-              所有商品
+              {t("nav_all_products") as string}
             </Link>
+
+            <LanguageToggle />
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white p-2"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <LanguageToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-white p-2"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -112,7 +120,7 @@ export function Navbar() {
               className="block text-white/80 hover:text-white transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              首頁
+              {t("nav_home") as string}
             </Link>
 
             {categories.map((category) => (
@@ -122,7 +130,7 @@ export function Navbar() {
                   className="block text-white/80 hover:text-white transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
-                  {category.name}
+                  {localized(category, "name")}
                 </Link>
                 {category.children && category.children.length > 0 && (
                   <div className="pl-4 mt-2 space-y-2">
@@ -133,7 +141,7 @@ export function Navbar() {
                         className="block text-white/60 hover:text-white transition-colors"
                         onClick={() => setIsOpen(false)}
                       >
-                        {child.name}
+                        {localized(child, "name")}
                       </Link>
                     ))}
                   </div>
@@ -146,7 +154,7 @@ export function Navbar() {
               className="block text-white/80 hover:text-white transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              所有商品
+              {t("nav_all_products") as string}
             </Link>
           </div>
         </div>

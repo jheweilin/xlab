@@ -18,38 +18,44 @@ model User {
 }
 
 model Category {
-  id          String     @id @default(cuid())
-  name        String
-  slug        String     @unique
-  description String?
-  image       String?
-  parentId    String?
-  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children    Category[] @relation("CategoryHierarchy")
-  products    Product[]
-  order       Int        @default(0)
-  isActive    Boolean    @default(true)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id            String     @id @default(cuid())
+  name          String
+  nameEn        String?
+  slug          String     @unique
+  description   String?
+  descriptionEn String?
+  image         String?
+  parentId      String?
+  parent        Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children      Category[] @relation("CategoryHierarchy")
+  products      Product[]
+  order         Int        @default(0)
+  isActive      Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }
 
 model Product {
-  id          String         @id @default(cuid())
-  name        String
-  slug        String         @unique
-  description String?
-  content     String?
-  price       Float?
-  images      ProductImage[]
-  categoryId  String
-  category    Category       @relation(fields: [categoryId], references: [id])
-  specs       String?
-  tags        String?
-  isFeatured  Boolean        @default(false)
-  isActive    Boolean        @default(true)
-  order       Int            @default(0)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id            String         @id @default(cuid())
+  name          String
+  nameEn        String?
+  slug          String         @unique
+  description   String?
+  descriptionEn String?
+  content       String?
+  contentEn     String?
+  price         Float?
+  images        ProductImage[]
+  categoryId    String
+  category      Category       @relation(fields: [categoryId], references: [id])
+  specs         String?
+  tags          String?
+  tagsEn        String?
+  isFeatured    Boolean        @default(false)
+  isActive      Boolean        @default(true)
+  order         Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model ProductImage {

@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function HeroBanner() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative min-h-[80vh] flex items-center overflow-hidden">
       {/* Background */}
@@ -27,21 +32,20 @@ export function HeroBanner() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
             <span className="w-2 h-2 rounded-full bg-xlab-red animate-pulse" />
-            <span className="text-white/80 text-sm">最新科技產品</span>
+            <span className="text-white/80 text-sm">{t("hero_badge") as string}</span>
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            探索{" "}
+            {t("hero_title_1") as string}{" "}
             <span className="text-gradient">
-              科技新境界
+              {t("hero_title_2") as string}
             </span>
           </h1>
 
           {/* Description */}
           <p className="text-lg md:text-xl text-white/60 mb-8 max-w-2xl">
-            精選最頂尖的 3C 電子產品，從電腦零組件到周邊配件，
-            打造屬於你的科技生活。品質保證，專業服務。
+            {t("hero_desc") as string}
           </p>
 
           {/* CTA Buttons */}
@@ -52,7 +56,7 @@ export function HeroBanner() {
               className="bg-gradient-xlab hover:opacity-90 text-white"
             >
               <Link href="/products">
-                瀏覽商品
+                {t("hero_browse") as string}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Link>
             </Button>
@@ -62,7 +66,7 @@ export function HeroBanner() {
               variant="outline"
               className="border-white/20 text-white hover:bg-white/10"
             >
-              <Link href="/categories">查看分類</Link>
+              <Link href="/categories">{t("hero_categories") as string}</Link>
             </Button>
           </div>
 
@@ -70,15 +74,15 @@ export function HeroBanner() {
           <div className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-white/10">
             <div>
               <div className="text-3xl font-bold text-white">1000+</div>
-              <div className="text-white/60 text-sm">精選商品</div>
+              <div className="text-white/60 text-sm">{t("hero_stat_products") as string}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-white">50+</div>
-              <div className="text-white/60 text-sm">知名品牌</div>
+              <div className="text-white/60 text-sm">{t("hero_stat_brands") as string}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-white">24hr</div>
-              <div className="text-white/60 text-sm">快速出貨</div>
+              <div className="text-white/60 text-sm">{t("hero_stat_shipping") as string}</div>
             </div>
           </div>
         </div>

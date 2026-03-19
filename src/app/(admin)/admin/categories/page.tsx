@@ -56,7 +56,9 @@ export default function CategoriesPage() {
 
   const [formData, setFormData] = useState({
     name: "",
+    nameEn: "",
     description: "",
+    descriptionEn: "",
     parentId: "",
     order: 0,
     isActive: true,
@@ -84,8 +86,10 @@ export default function CategoriesPage() {
     setEditingCategory(null);
     setFormData({
       name: "",
+      nameEn: "",
       description: "",
-      parentId: "",
+      descriptionEn: "",
+      parentId: "none",
       order: 0,
       isActive: true,
     });
@@ -96,8 +100,10 @@ export default function CategoriesPage() {
     setEditingCategory(category);
     setFormData({
       name: category.name,
+      nameEn: (category as any).nameEn || "",
       description: category.description || "",
-      parentId: category.parentId || "",
+      descriptionEn: (category as any).descriptionEn || "",
+      parentId: category.parentId || "none",
       order: category.order,
       isActive: category.isActive,
     });
@@ -117,8 +123,13 @@ export default function CategoriesPage() {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formData,
-          parentId: formData.parentId || null,
+          name: formData.name,
+          nameEn: formData.nameEn || null,
+          description: formData.description,
+          descriptionEn: formData.descriptionEn || null,
+          parentId: formData.parentId === "none" ? null : formData.parentId,
+          order: formData.order,
+          isActive: formData.isActive,
         }),
       });
 
@@ -325,33 +336,59 @@ export default function CategoriesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-xlab-dark border-white/10">
+        <DialogContent className="bg-xlab-dark border-white/10 max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-white">
               {editingCategory ? "編輯分類" : "新增分類"}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label>分類名稱</Label>
-              <Input
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-                className="bg-white/5 border-white/10"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>分類名稱</Label>
+                <Input
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                  className="bg-white/5 border-white/10"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Category Name (EN)</Label>
+                <Input
+                  value={formData.nameEn}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nameEn: e.target.value })
+                  }
+                  placeholder="English category name"
+                  className="bg-white/5 border-white/10"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label>描述</Label>
-              <Textarea
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                className="bg-white/5 border-white/10"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>描述</Label>
+                <Textarea
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  className="bg-white/5 border-white/10"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Description (EN)</Label>
+                <Textarea
+                  value={formData.descriptionEn}
+                  onChange={(e) =>
+                    setFormData({ ...formData, descriptionEn: e.target.value })
+                  }
+                  placeholder="English description"
+                  className="bg-white/5 border-white/10"
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label>上層分類</Label>
@@ -362,10 +399,10 @@ export default function CategoriesPage() {
                 }
               >
                 <SelectTrigger className="bg-white/5 border-white/10">
-                  <SelectValue placeholder="無（作為頂層分類）" />
+                  <SelectValue placeholder="選擇上層分類" />
                 </SelectTrigger>
                 <SelectContent className="bg-xlab-dark border-white/10">
-                  <SelectItem value="">無（作為頂層分類）</SelectItem>
+                  <SelectItem value="none">無（作為頂層分類）</SelectItem>
                   {rootCategories
                     .filter((c) => c.id !== editingCategory?.id)
                     .map((category) => (

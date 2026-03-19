@@ -58,11 +58,15 @@ export default function ProductsPage() {
 
   const [formData, setFormData] = useState({
     name: "",
+    nameEn: "",
     description: "",
+    descriptionEn: "",
     content: "",
+    contentEn: "",
     price: "",
     categoryId: "",
     tags: "",
+    tagsEn: "",
     isFeatured: false,
     isActive: true,
     order: 0,
@@ -104,11 +108,15 @@ export default function ProductsPage() {
     setEditingProduct(null);
     setFormData({
       name: "",
+      nameEn: "",
       description: "",
+      descriptionEn: "",
       content: "",
+      contentEn: "",
       price: "",
       categoryId: "",
       tags: "",
+      tagsEn: "",
       isFeatured: false,
       isActive: true,
       order: 0,
@@ -121,11 +129,15 @@ export default function ProductsPage() {
     setEditingProduct(product);
     setFormData({
       name: product.name,
+      nameEn: (product as any).nameEn || "",
       description: product.description || "",
+      descriptionEn: (product as any).descriptionEn || "",
       content: product.content || "",
+      contentEn: (product as any).contentEn || "",
       price: product.price?.toString() || "",
       categoryId: product.categoryId,
       tags: product.tags || "",
+      tagsEn: (product as any).tagsEn || "",
       isFeatured: product.isFeatured,
       isActive: product.isActive,
       order: product.order,
@@ -148,12 +160,18 @@ export default function ProductsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
+          nameEn: formData.nameEn || null,
           description: formData.description || null,
+          descriptionEn: formData.descriptionEn || null,
           content: formData.content || null,
+          contentEn: formData.contentEn || null,
           price: formData.price ? parseFloat(formData.price) : null,
           categoryId: formData.categoryId,
           tags: formData.tags
             ? formData.tags.split(",").map((t) => t.trim())
+            : [],
+          tagsEn: formData.tagsEn
+            ? formData.tagsEn.split(",").map((t) => t.trim())
             : [],
           isFeatured: formData.isFeatured,
           isActive: formData.isActive,
@@ -407,6 +425,20 @@ export default function ProductsPage() {
                 />
               </div>
               <div className="space-y-2">
+                <Label>Product Name (EN)</Label>
+                <Input
+                  value={formData.nameEn}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nameEn: e.target.value })
+                  }
+                  placeholder="English product name"
+                  className="bg-white/5 border-white/10"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
                 <Label>分類 *</Label>
                 <Select
                   value={formData.categoryId}
@@ -429,28 +461,56 @@ export default function ProductsPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>簡短描述</Label>
-              <Textarea
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                className="bg-white/5 border-white/10"
-                rows={2}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>簡短描述</Label>
+                <Textarea
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  className="bg-white/5 border-white/10"
+                  rows={2}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Description (EN)</Label>
+                <Textarea
+                  value={formData.descriptionEn}
+                  onChange={(e) =>
+                    setFormData({ ...formData, descriptionEn: e.target.value })
+                  }
+                  placeholder="English description"
+                  className="bg-white/5 border-white/10"
+                  rows={2}
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>詳細內容 / 規格</Label>
-              <Textarea
-                value={formData.content}
-                onChange={(e) =>
-                  setFormData({ ...formData, content: e.target.value })
-                }
-                className="bg-white/5 border-white/10"
-                rows={4}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>詳細內容 / 規格</Label>
+                <Textarea
+                  value={formData.content}
+                  onChange={(e) =>
+                    setFormData({ ...formData, content: e.target.value })
+                  }
+                  className="bg-white/5 border-white/10"
+                  rows={4}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Content / Specs (EN)</Label>
+                <Textarea
+                  value={formData.contentEn}
+                  onChange={(e) =>
+                    setFormData({ ...formData, contentEn: e.target.value })
+                  }
+                  placeholder="English content / specs"
+                  className="bg-white/5 border-white/10"
+                  rows={4}
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -478,6 +538,18 @@ export default function ProductsPage() {
                   className="bg-white/5 border-white/10"
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Tags EN (comma separated)</Label>
+              <Input
+                value={formData.tagsEn}
+                onChange={(e) =>
+                  setFormData({ ...formData, tagsEn: e.target.value })
+                }
+                placeholder="New, Hot, Limited"
+                className="bg-white/5 border-white/10"
+              />
             </div>
 
             <div className="grid grid-cols-3 gap-4">

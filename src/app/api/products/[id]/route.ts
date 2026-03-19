@@ -56,12 +56,16 @@ export async function PUT(
     const body = await request.json();
     const {
       name,
+      nameEn,
       description,
+      descriptionEn,
       content,
+      contentEn,
       price,
       categoryId,
       specs,
       tags,
+      tagsEn,
       isFeatured,
       isActive,
       order,
@@ -102,13 +106,17 @@ export async function PUT(
     }
 
     if (description !== undefined) updateData.description = description;
+    if (descriptionEn !== undefined) updateData.descriptionEn = descriptionEn || null;
     if (content !== undefined) updateData.content = content;
+    if (contentEn !== undefined) updateData.contentEn = contentEn || null;
+    if (nameEn !== undefined) updateData.nameEn = nameEn || null;
     if (price !== undefined) {
       updateData.price = price ? parseFloat(price) : null;
     }
     if (categoryId !== undefined) updateData.category = { connect: { id: categoryId } };
     if (specs !== undefined) updateData.specs = specs ? JSON.stringify(specs) : null;
     if (tags !== undefined) updateData.tags = Array.isArray(tags) ? tags.join(",") : (tags || null);
+    if (tagsEn !== undefined) updateData.tagsEn = Array.isArray(tagsEn) ? tagsEn.join(",") : (tagsEn || null);
     if (isFeatured !== undefined) updateData.isFeatured = isFeatured;
     if (isActive !== undefined) updateData.isActive = isActive;
     if (order !== undefined) updateData.order = order;
