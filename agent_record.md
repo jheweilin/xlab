@@ -103,6 +103,125 @@ This document records all AI-assisted development changes made to the XLAB 3C e-
 
 ---
 
+---
+
+## VPS Deployment Guide
+
+### Infrastructure Info
+
+| Item | Value |
+|------|-------|
+| **Domain** | `x-lab-store.com` (Cloudflare Registrar, expires 2027-04-03) |
+| **VPS** | Linode Nanode 1GB, Singapore (ap-south) |
+| **VPS IP** | `172.104.62.119` |
+| **OS** | Ubuntu 24.04 LTS |
+| **SSH** | `ssh root@172.104.62.119` |
+| **LISH Console** | `ssh -t hcsu0568@lish-ap-south.linode.com xlab-web` |
+
+### Step 1 — Install Docker & Dependencies
+
+```bash
+# Install Docker
+curl -fsSL https://get.docker.com | sh
+
+# Install Docker Compose plugin, Git, Nginx, Certbot
+apt update && apt install -y docker-compose-plugin git nginx certbot python3-certbot-nginx
+```
+
+### Step 2 — Clone & Deploy
+
+```bash
+# Clone repo
+cd /opt
+git clone https://github.com/jheweilin/xlab.git
+cd xlab
+
+# Create data directories
+mkdir -p data/uploads data/db
+
+# Build and start (first time takes a few minutes)
+docker compose up -d --build
+```
+
+### Step 3 — Configure Nginx Reverse Proxy
+
+```bash
+cat > /etc/nginx/sites-available/xlab <<'NGINX'
+server {
+    listen 80;
+    server_name x-lab-store.com www.x-lab-store.com;
+
+    client_max_body_size 20M;
+
+    location / {
+        proxy_pass http://127.0.0.1:4567;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+NGINX
+
+ln -sf /etc/nginx/sites-available/xlab /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
+nginx -t && systemctl reload nginx
+```
+
+### Step 4 — Configure DNS (Cloudflare Dashboard)
+
+Go to Cloudflare Dashboard → `x-lab-store.com` → DNS → Add records:
+
+| Type | Name | Content | Proxy |
+|------|------|---------|-------|
+| A | `@` | `172.104.62.119` | Proxied (orange cloud) |
+| A | `www` | `172.104.62.119` | Proxied (orange cloud) |
+
+### Step 5 — Enable SSL
+
+**Option A — Cloudflare proxy is ON (recommended):**
+
+Cloudflare auto-handles SSL. Go to SSL/TLS → set mode to **Full**.
+
+**Option B — Cloudflare proxy is OFF (grey cloud):**
+
+```bash
+certbot --nginx -d x-lab-store.com -d www.x-lab-store.com
+```
+
+### Step 6 — Verify
+
+```bash
+# Check Docker is running
+docker ps
+
+# Check site locally
+curl -s -o /dev/null -w "%{http_code}" http://localhost:4567
+
+# Check from outside (after DNS propagates)
+curl -s -o /dev/null -w "%{http_code}" https://x-lab-store.com
+```
+
+### Maintenance Commands
+
+```bash
+# View logs
+docker logs xlab-web --tail 50
+
+# Restart service
+docker restart xlab-web
+
+# Pull latest code and redeploy
+cd /opt/xlab
+git pull
+docker compose up -d --build
+
+# Restart Nginx
+systemctl reload nginx
+```
+
+---
+
 ## Architecture Notes
 
 - **Server Components** handle data fetching (Prisma queries)
