@@ -8,6 +8,7 @@ RUN npm ci
 
 # 階段 2: 建置
 FROM node:20-slim AS builder
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules

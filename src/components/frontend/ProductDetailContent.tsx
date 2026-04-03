@@ -16,6 +16,7 @@ interface ProductDetailContentProps {
 
 export function ProductDetailContent({ product, relatedProducts }: ProductDetailContentProps) {
   const { locale, t, localized } = useLanguage();
+  const showPrice = product.showPrice !== false;
 
   return (
     <div className="min-h-screen py-8">
@@ -86,9 +87,11 @@ export function ProductDetailContent({ product, relatedProducts }: ProductDetail
             </Link>
 
             {/* Price */}
-            <div className="text-3xl font-bold text-gradient">
-              {formatPrice(product.price?.toString())}
-            </div>
+            {showPrice && (
+              <div className="text-3xl font-bold text-gradient">
+                {formatPrice(product.price?.toString())}
+              </div>
+            )}
 
             {/* Description */}
             {(product.description || product.descriptionEn) && (

@@ -13,6 +13,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { locale, t, localized } = useLanguage();
+  const showPrice = (product as any).showPrice !== false;
   const mainImage = product.images[0]?.url;
   const rawTags = locale === "en" && (product as any).tagsEn ? (product as any).tagsEn : product.tags;
   const tags: string[] = rawTags ? (typeof rawTags === 'string' ? rawTags.split(',') : rawTags) : [];
@@ -73,9 +74,11 @@ export function ProductCard({ product }: ProductCardProps) {
             {localized(product, "description")}
           </p>
         )}
-        <p className="text-lg font-semibold text-gradient">
-          {formatPrice(product.price?.toString())}
-        </p>
+        {showPrice && (
+          <p className="text-lg font-semibold text-gradient">
+            {formatPrice(product.price?.toString())}
+          </p>
+        )}
       </div>
     </Link>
   );

@@ -69,6 +69,7 @@ export default function ProductsPage() {
     tagsEn: "",
     isFeatured: false,
     isActive: true,
+    showPrice: true,
     order: 0,
     images: [] as string[],
   });
@@ -119,6 +120,7 @@ export default function ProductsPage() {
       tagsEn: "",
       isFeatured: false,
       isActive: true,
+      showPrice: true,
       order: 0,
       images: [],
     });
@@ -140,6 +142,7 @@ export default function ProductsPage() {
       tagsEn: (product as any).tagsEn || "",
       isFeatured: product.isFeatured,
       isActive: product.isActive,
+      showPrice: (product as any).showPrice !== false,
       order: product.order,
       images: product.images.map((img) => img.url),
     });
@@ -175,6 +178,7 @@ export default function ProductsPage() {
             : [],
           isFeatured: formData.isFeatured,
           isActive: formData.isActive,
+          showPrice: formData.showPrice,
           order: formData.order,
           images: formData.images.map((url) => ({ url })),
         }),
@@ -552,7 +556,7 @@ export default function ProductsPage() {
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label>排序</Label>
                 <Input
@@ -578,6 +582,20 @@ export default function ProductsPage() {
                   />
                   <span className="text-sm text-white/60">
                     {formData.isFeatured ? "是" : "否"}
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>顯示價格</Label>
+                <div className="flex items-center gap-2 h-10">
+                  <Switch
+                    checked={formData.showPrice}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, showPrice: checked })
+                    }
+                  />
+                  <span className="text-sm text-white/60">
+                    {formData.showPrice ? "顯示" : "隱藏"}
                   </span>
                 </div>
               </div>

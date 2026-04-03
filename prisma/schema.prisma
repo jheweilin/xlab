@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -53,6 +54,7 @@ model Product {
   tagsEn        String?
   isFeatured    Boolean        @default(false)
   isActive      Boolean        @default(true)
+  showPrice     Boolean        @default(true)
   order         Int            @default(0)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt

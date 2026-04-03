@@ -68,6 +68,7 @@ export async function PUT(
       tagsEn,
       isFeatured,
       isActive,
+      showPrice,
       order,
       images,
     } = body;
@@ -119,6 +120,7 @@ export async function PUT(
     if (tagsEn !== undefined) updateData.tagsEn = Array.isArray(tagsEn) ? tagsEn.join(",") : (tagsEn || null);
     if (isFeatured !== undefined) updateData.isFeatured = isFeatured;
     if (isActive !== undefined) updateData.isActive = isActive;
+    if (showPrice !== undefined) updateData.showPrice = showPrice;
     if (order !== undefined) updateData.order = order;
 
     // Handle images update

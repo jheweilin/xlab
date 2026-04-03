@@ -73,6 +73,36 @@ This document records all AI-assisted development changes made to the XLAB 3C e-
 
 ---
 
+### 4. Docker Build Fix & Image URL Encoding Fix
+
+**Goal:** Fix Docker container startup failures and product image display errors.
+
+**Issue 1 — Prisma OpenSSL engine mismatch in Docker:**
+- The `node:20-slim` base image ships with OpenSSL 3.0.x, but the Dockerfile builder stage did not install `openssl`, causing Prisma to default to generating the `openssl-1.1.x` engine binary. At runtime, the container could not find the correct engine.
+
+**Fix:**
+- `Dockerfile` — Added `apt-get install openssl` to the builder stage so Prisma can detect the correct OpenSSL version during `prisma generate`
+- `prisma/schema.prisma` — Added `binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]` to the generator block
+
+**Issue 2 — Persistent database missing new columns:**
+- The Docker volume-mounted database (`data/db/dev.db`) was created before the bilingual fields and `showPrice` were added to the schema, so the container hit `P2022` errors ("column does not exist").
+
+**Fix:**
+- Manually ran `ALTER TABLE` via `sqlite3` to add `nameEn`, `descriptionEn`, `contentEn`, `tagsEn` to `Product`, `nameEn`, `descriptionEn` to `Category`, and `showPrice` to `Product`.
+
+**Issue 3 — Product images with spaces/Chinese characters in filenames not loading:**
+- Image paths like `/uploads/apple watch全覆蓋殼01.jpg` contain spaces and Chinese characters. The `getImageUrl()` helper returned the raw path without URL encoding, causing Next.js `Image` component to fail loading.
+
+**Fix:**
+- `src/lib/utils.ts` — Updated `getImageUrl()` to split the path by `/` and apply `encodeURIComponent()` to each segment before joining back.
+
+**Modified Files:**
+- `Dockerfile` — Added `openssl` install to builder stage
+- `prisma/schema.prisma` — Added `binaryTargets`
+- `src/lib/utils.ts` — `getImageUrl()` now URL-encodes path segments
+
+---
+
 ## Architecture Notes
 
 - **Server Components** handle data fetching (Prisma queries)

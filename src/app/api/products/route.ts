@@ -108,6 +108,7 @@ export async function POST(request: NextRequest) {
       tagsEn,
       isFeatured,
       isActive,
+      showPrice,
       order,
       images,
     } = body;
@@ -155,6 +156,7 @@ export async function POST(request: NextRequest) {
         tagsEn: Array.isArray(tagsEn) ? tagsEn.join(",") : (tagsEn || null),
         isFeatured: isFeatured ?? false,
         isActive: isActive ?? true,
+        showPrice: showPrice ?? true,
         order: order ?? 0,
         images: images?.length
           ? {

@@ -92,6 +92,20 @@ export function Navbar() {
               {t("nav_all_products") as string}
             </Link>
 
+            <Link
+              href="/about"
+              className="text-white/80 hover:text-white transition-colors"
+            >
+              {t("nav_about") as string}
+            </Link>
+
+            <Link
+              href="/contact"
+              className="text-white/80 hover:text-white transition-colors"
+            >
+              {t("nav_contact") as string}
+            </Link>
+
             <LanguageToggle />
           </div>
 
@@ -155,6 +169,22 @@ export function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               {t("nav_all_products") as string}
+            </Link>
+
+            <Link
+              href="/about"
+              className="block text-white/80 hover:text-white transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("nav_about") as string}
+            </Link>
+
+            <Link
+              href="/contact"
+              className="block text-white/80 hover:text-white transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("nav_contact") as string}
             </Link>
           </div>
         </div>

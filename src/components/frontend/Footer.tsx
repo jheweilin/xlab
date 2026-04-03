@@ -49,6 +49,14 @@ export function Footer() {
                   {t("footer_categories") as string}
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-white/60 hover:text-white transition-colors"
+                >
+                  {t("footer_about") as string}
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -74,7 +82,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/contact"
                   className="text-white/60 hover:text-white transition-colors"
                 >
                   {t("footer_contact_us") as string}
@@ -87,8 +95,9 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">{t("footer_contact_info") as string}</h3>
             <ul className="space-y-2 text-white/60 text-sm">
-              <li>service@xlab.com</li>
-              <li>(02) 1234-5678</li>
+              <li>{t("footer_company") as string}</li>
+              <li>{t("contact_email") as string}</li>
+              <li>{t("contact_phone") as string}</li>
               <li>{t("footer_address") as string}</li>
             </ul>
           </div>

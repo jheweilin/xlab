@@ -35,5 +35,6 @@ export function truncate(text: string, length: number): string {
 export function getImageUrl(path: string | null | undefined): string {
   if (!path) return "/placeholder.jpg";
   if (path.startsWith("http")) return path;
-  return path.startsWith("/") ? path : `/${path}`;
+  const fullPath = path.startsWith("/") ? path : `/${path}`;
+  return fullPath.split("/").map(segment => encodeURIComponent(segment)).join("/");
 }
