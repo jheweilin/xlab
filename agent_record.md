@@ -131,17 +131,26 @@ apt update && apt install -y docker-compose-plugin git nginx certbot python3-cer
 ### Step 2 — Clone & Deploy
 
 ```bash
-# Clone repo
+# Clone repo (private repo, need SSH key on GitHub)
 cd /opt
-git clone https://github.com/jheweilin/xlab.git
+git clone git@github.com:jheweilin/xlab.git
 cd xlab
 
 # Create data directories
 mkdir -p data/uploads data/db
 
+# Load seed data (database + product images)
+cp seed-data/dev.db data/db/dev.db
+tar xzf seed-data/uploads.tar.gz -C data/
+
 # Build and start (first time takes a few minutes)
 docker compose up -d --build
 ```
+
+> **Note:** `seed-data/` folder contains the SQLite database and product images.
+> The database (`prisma/dev.db`) and uploads (`public/uploads/`) are gitignored,
+> so they must be loaded from `seed-data/` on first deploy. If products or images
+> are updated, re-run the seed data commands above after `git pull`.
 
 ### Step 3 — Configure Nginx Reverse Proxy
 
