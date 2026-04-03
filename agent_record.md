@@ -231,6 +231,45 @@ systemctl reload nginx
 
 ---
 
+### 5. VPS Deployment & Docker Improvements (2026-04-03)
+
+**Goal:** Deploy the site on the Linode VPS with proper database initialization, Nginx, SSL, and DNS.
+
+**Issue 1 — Volume mount overwrites Prisma directory:**
+- `docker-compose.yml` mounted `./data/db:/app/prisma`, which replaced the container's entire `prisma/` directory (including `schema.prisma`) with an empty host directory, causing "Unable to open the database file" errors.
+
+**Fix:**
+- `prisma/schema.prisma` — Changed `url` from hardcoded `"file:./dev.db"` to `env("DATABASE_URL")` so the database path is configurable
+- `Dockerfile` — Restructured to a 3-stage build:
+  - Builder stage now runs `prisma db push` to create an initial empty database (`init.db`)
+  - Runner stage copies `init.db` for first-run initialization
+  - Database stored at `/app/data/dev.db` (separate from prisma schema directory)
+- `docker-compose.yml` — Changed volume mount from `./data/db:/app/prisma` to `./data/db:/app/data`, added `DATABASE_URL` environment variable
+- `entrypoint.sh` — New entrypoint script that copies `init.db` to `/app/data/dev.db` on first run if database doesn't exist, then starts the Node.js server
+
+**Issue 2 — Host directory permissions:**
+- Volume-mounted `data/db` and `data/uploads` were owned by root, but the container runs as `nextjs` (UID 1001), causing permission denied errors.
+
+**Fix:**
+- Set host directory ownership: `chown -R 1001:1001 data/db data/uploads`
+
+**Deployment steps completed:**
+1. Docker container built and running (port 4567)
+2. Nginx reverse proxy configured (port 80/443 → 4567)
+3. SSL certificate issued via Let's Encrypt + Certbot (auto-renew, expires 2026-07-02)
+4. DNS configured on Cloudflare (A records for `@` and `www` → `172.104.62.119`, Proxied)
+5. Cloudflare SSL/TLS mode set to Full
+6. Seed data (database + product images) loaded from `seed-data/`
+7. Admin credentials updated
+
+**Modified Files:**
+- `prisma/schema.prisma` — `url = env("DATABASE_URL")`
+- `Dockerfile` — New 3-stage build with db init
+- `docker-compose.yml` — New volume mount and `DATABASE_URL` env
+- `entrypoint.sh` — New entrypoint script for first-run db initialization
+
+---
+
 ## Architecture Notes
 
 - **Server Components** handle data fetching (Prisma queries)

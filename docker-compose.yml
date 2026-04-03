@@ -13,9 +13,10 @@ services:
       # 持久化上傳的圖片
       - ./data/uploads:/app/public/uploads
       # 持久化 SQLite 資料庫
-      - ./data/db:/app/prisma
+      - ./data/db:/app/data
     environment:
       - NODE_ENV=production
+      - DATABASE_URL=file:/app/data/dev.db
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-xlab-secret-key-change-in-production}
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:4567}
     healthcheck:
